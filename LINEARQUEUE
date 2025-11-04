@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define maxsize 10
+int arr[maxsize];
+int r,f=-1,i;
+int insert(x){
+    if(r>=maxsize-1)
+        printf("overflow condition");
+    else if(r<=-1)
+        printf("underflow condition");
+    else
+        r=r+1;
+
+    arr[r]=x;
+}
+int delete(x){
+    if (r==-1&&f==-1){
+
+        printf("underflow condition");
+	}
+    else if(r=0,f=0){
+
+        r=-1;
+        f=-1;
+	}
+    else{
+
+        printf("deleted item is : %d",arr[f]);
+        f=f+1;
+	}
+void display(){
+		if (r==-1&&f==-1){
+
+        	printf("underflow condition");
+	}
+	else{
+
+    	for( i=f;i<r;i++){
+        	printf("%d",arr[i]);
+    	}
+	}
+}
+void main(){
+    int choice,element;
+    do{
+
+        printf("\n 1.insert \n 2.delete \n 3.display \n 4.close");
+        printf("enter your choice");
+        scanf("%d",&choice);
+        switch(choice){
+        case 1:
+            printf("enter an element to insert :");
+            scanf("%d",&element);
+            insert(element);
+            break;
+        case 2:
+        	delete();
+			break;
+		case 3:
+			display();
+			break;
+		case 4:
+			printf("exitting from the loop");
+			break;
+		default:
+			printf("invalid choice");
+    	}
+
+	}while(choice!=4);
+
+
+
+
+
+
+        }
+
+}
