@@ -1,0 +1,101 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define maxsize 10
+
+int arr[maxsize];
+int r = -1;
+int f = -1;
+
+void insert(int x){
+    if((r == maxsize - 1 && f == 0) || (r == f - 1)){
+        printf("Overflow condition (Queue is full)\n");
+    } else {
+        if(f == -1){
+            f = 0;
+            r = 0;
+        } else if (r == maxsize - 1){
+            r = 0;
+        } else {
+            r++;
+        }
+        arr[r] = x;
+        printf("Inserted item is: %d\n", x);
+    }
+}
+
+void delete(){
+    if(f == -1){
+        printf("Underflow condition (Queue is empty)\n");
+    } else {
+        printf("Deleted item is: %d\n", arr[f]);
+        if(f == r){
+            f = -1;
+            r = -1;
+        } else if (f == maxsize - 1){
+            f = 0;
+        } else {
+            f++;
+        }
+    }
+}
+
+void display(){
+    int i;
+    if(f == -1){
+        printf("Underflow condition (Queue is empty)\n");
+    } else {
+        printf("Queue elements are: ");
+        if(f <= r){
+            for(i = f; i <= r; i++){
+                printf("%d ", arr[i]);
+            }
+        } else {
+            for(i = f; i < maxsize; i++){
+                printf("%d ", arr[i]);
+            }
+            for(i = 0; i <= r; i++){
+                printf("%d ", arr[i]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+int main(){
+    int choice, element;
+    do{
+        printf("\nCircular Queue Operations:\n");
+        printf("1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Display\n");
+        printf("4. Close\n");
+        printf("Enter your choice: ");
+        if(scanf("%d", &choice) != 1) {
+           
+            while (getchar() != '\n');
+            choice = 0; // Set to invalid choice
+        }
+
+        switch(choice){
+        case 1:
+            printf("Enter an element to insert: ");
+            scanf("%d", &element);
+            insert(element);
+            break;
+        case 2:
+            delete();
+            break;
+        case 3:
+            display();
+            break;
+        case 4:
+            printf("Exiting from the program\n");
+            break;
+        default:
+            printf("Invalid choice. Please try again.\n");
+            break;
+        }
+    } while(choice != 4);
+
+    return 0;
+}
