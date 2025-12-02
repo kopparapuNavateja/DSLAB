@@ -1,0 +1,125 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertAtEnd(struct Node** head, int value) {
+    struct Node* newNode = createNode(value);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+}
+
+void deleteAtBeginning(struct Node** head) {
+    if (*head == NULL) {
+        printf("List is Empty\n");
+        return;
+    }
+    struct Node* temp = *head;
+    printf("%d is deleted\n", temp->data);
+    *head = (*head)->next;
+    free(temp);
+}
+
+void deleteAtEnd(struct Node** head) {
+    if (*head == NULL) {
+        printf("List is Empty\n");
+        return;
+    }
+    if ((*head)->next == NULL) {
+        printf("%d is deleted\n", (*head)->data);
+        free(*head);
+        *head = NULL;
+        return;
+    }
+    struct Node* temp = *head;
+    struct Node* prev = NULL;
+    while (temp->next != NULL) {
+        prev = temp;
+        temp = temp->next;
+    }
+    printf("%d is deleted\n", temp->data);
+    prev->next = NULL;
+    free(temp);
+}
+
+void display(struct Node** head) {
+    struct Node* temp = *head;
+    if (*head == NULL) {
+        printf("List is Empty\n");
+        return;
+    }
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    int choice, value;
+
+    while (1) {
+        printf("\n---- Linked List Menu ----\n");
+        printf("1. insert in stack\n");
+        printf("2. Delete in stack\n");
+        printf("3. insert in queue\n");
+        printf("4. Delete in queue\n");
+        printf("5. exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                insertAtEnd(&head, value);
+                display(&head);
+                break;
+
+            case 2:
+                deleteAtEnd(&head);
+                display(&head);
+                break;
+
+            case 3:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                insertAtEnd(&head, value);
+                display(&head);
+                break;
+
+            case 4:
+                deleteAtBeginning(&head);
+                display(&head);
+                break;
+
+            case 5:
+                return 0;
+
+            default:
+                printf("Invalid Choice!\n");
+        }
+    }
+}
