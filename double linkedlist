@@ -1,0 +1,186 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+
+typedef struct {
+    Node* head;
+    Node* tail;
+} DoublyLinkedList;
+
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void initList(DoublyLinkedList* list) {
+    list->head = NULL;
+    list->tail = NULL;
+}
+
+void append(DoublyLinkedList* list, int data) {
+    Node* newNode = createNode(data);
+    if (list->head == NULL) {
+        list->head = newNode;
+        list->tail = newNode;
+        return;
+    }
+    list->tail->next = newNode;
+    newNode->prev = list->tail;
+    list->tail = newNode;
+}
+
+void display(DoublyLinkedList* list) {
+    if (list->head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    Node* current = list->head;
+    printf("List (Head -> Tail): ");
+    while (current != NULL) {
+        printf("%d", current->data);
+        current = current->next;
+        if (current != NULL) printf(" <-> ");
+    }
+    printf("\n");
+}
+
+void insertLeftOfValue(DoublyLinkedList* list, int target_value, int new_data) {
+    Node* current = list->head;
+    while (current != NULL) {
+        if (current->data == target_value) {
+            Node* newNode = createNode(new_data);
+            if (current == list->head) {
+                newNode->next = list->head;
+                list->head->prev = newNode;
+                list->head = newNode;
+            } else {
+                newNode->next = current;
+                newNode->prev = current->prev;
+                current->prev->next = newNode;
+                current->prev = newNode;
+            }
+            printf("Inserted %d to the left of %d.\n", new_data, target_value);
+            return;
+        }
+        current = current->next;
+    }
+    printf("Error: Target value %d not found for insertion.\n", target_value);
+}
+
+void deleteByValue(DoublyLinkedList* list, int target_value) {
+    Node* current = list->head;
+    while (current != NULL) {
+        if (current->data == target_value) {
+            if (current == list->head) {
+                list->head = current->next;
+                if (list->head != NULL)
+                    list->head->prev = NULL;
+                else
+                    list->tail = NULL;
+            } else if (current == list->tail) {
+                list->tail = current->prev;
+                list->tail->next = NULL;
+            } else {
+                current->prev->next = current->next;
+                current->next->prev = current->prev;
+            }
+            printf("Deleted node with value %d.\n", target_value);
+            free(current);
+            return;
+        }
+        current = current->next;
+    }
+    printf("Error: Value %d not found for deletion.\n", target_value);
+}
+
+void freeList(DoublyLinkedList* list) {
+    Node* current = list->head;
+    Node* next;
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    list->head = NULL;
+    list->tail = NULL;
+    printf("List memory freed.\n");
+}
+
+int main() {
+    DoublyLinkedList dll;
+    initList(&dll);
+
+    int choice, value, target;
+
+    while (1) {
+        printf("\n==== Doubly Linked List Menu ====\n");
+        printf("1. Append Node\n");
+        printf("2. Insert Left of Value\n");
+        printf("3. Delete by Value\n");
+        printf("4. Display List\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to append: ");
+                scanf("%d", &value);
+                append(&dll, value);
+                break;
+
+            case 2:
+                printf("Enter target value: ");
+                scanf("%d", &target);
+                printf("Enter new value to insert left: ");
+                scanf("%d", &value);
+                insertLeftOfValue(&dll, target, value);
+                break;
+
+            case 3:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                deleteByValue(&dll, value);
+                break;
+
+            case 4:
+                display(&dll);
+                break;
+
+            case 5:
+                freeList(&dll);
+                printf("Exiting program...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
