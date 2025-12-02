@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+
+struct Node* createNode() {
+    int data;
+    printf("Enter data: ");
+    scanf("%d", &data);
+
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    temp->data = data;
+    temp->left = NULL;
+    temp->right = NULL;
+    
+    return temp;                                                                                                                                                                                                                 
+}
+
+void insert(struct Node* root, struct Node* temp) {
+    if (temp->data < root->data) {
+        if (root->left != NULL)
+            insert(root->left, temp);
+        else
+            root->left = temp;
+    }
+    else if (temp->data > root->data) {
+        if (root->right != NULL)
+            insert(root->right, temp);
+        else
+            root->right = temp;
+    }
+}
+
+void inorder(struct Node *root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+void preorder(struct Node *root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+int main() {
+    char ch;
+    struct Node* root = NULL;
+    struct Node* k;
+
+    do {
+        k = createNode();
+
+        if (root == NULL)
+            root = k;
+        else
+            insert(root, k);
+
+        printf("Do you want to enter more (y/n): ");
+        scanf(" %c", &ch);
+
+    } while (ch == 'y' || ch == 'Y');
+
+    printf("\nInorder traversal: ");
+    inorder(root);
+
+    printf("\nPreorder traversal: ");
+    preorder(root);
+
+    return 0;
+}
